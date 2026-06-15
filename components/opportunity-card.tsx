@@ -1,6 +1,6 @@
 "use client"
 
-import { Check, CalendarDays, GraduationCap, Heart } from "lucide-react"
+import { Check, CalendarDays, GraduationCap, Heart, Sparkles } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { categoryColors, type Opportunity } from "@/lib/opportunities"
 
@@ -8,24 +8,39 @@ type OpportunityCardProps = {
   opportunity: Opportunity
   isSaved: boolean
   onToggleSave: (id: number) => void
+  recommended?: boolean
 }
 
 export function OpportunityCard({
   opportunity,
   isSaved,
   onToggleSave,
+  recommended = false,
 }: OpportunityCardProps) {
   return (
-    <article className="group flex flex-col rounded-2xl border border-border bg-card p-5 transition-colors hover:border-primary/50">
-      <div className="mb-4 flex items-start justify-between gap-2">
-        <span
-          className={cn(
-            "inline-flex rounded-full border px-3 py-1 text-xs font-medium",
-            categoryColors[opportunity.category],
+    <article
+      className={cn(
+        "group flex flex-col rounded-2xl border bg-card p-5 transition-colors hover:border-primary/50",
+        recommended ? "border-primary/40 ring-1 ring-primary/20" : "border-border",
+      )}
+    >
+      <div className="mb-4 flex flex-wrap items-start justify-between gap-2">
+        <div className="flex flex-wrap items-center gap-2">
+          <span
+            className={cn(
+              "inline-flex rounded-full border px-3 py-1 text-xs font-medium",
+              categoryColors[opportunity.category],
+            )}
+          >
+            {opportunity.category}
+          </span>
+          {recommended && (
+            <span className="inline-flex items-center gap-1 rounded-full border border-primary/30 bg-primary/10 px-2.5 py-1 text-xs font-medium text-primary">
+              <Sparkles className="size-3" aria-hidden="true" />
+              Для тебя
+            </span>
           )}
-        >
-          {opportunity.category}
-        </span>
+        </div>
         <span className="inline-flex items-center gap-1 rounded-full bg-muted px-3 py-1 text-xs font-medium text-muted-foreground">
           <GraduationCap className="size-3.5" aria-hidden="true" />
           {opportunity.grades}

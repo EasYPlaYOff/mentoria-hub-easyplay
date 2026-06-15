@@ -4,12 +4,13 @@ import { useMemo, useState } from "react"
 import { Check, ChevronDown, PlayCircle } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { courses, type Lesson } from "@/lib/courses"
+import { useStore } from "@/lib/store"
 
 export function CoursesLearning() {
+  const { progress: completed, setLessonCompleted } = useStore()
   const [activeCourseId, setActiveCourseId] = useState(courses[0].id)
   const [activeLessonId, setActiveLessonId] = useState(courses[0].lessons[0].id)
   const [openCourseId, setOpenCourseId] = useState<string | null>(courses[0].id)
-  const [completed, setCompleted] = useState<Record<string, boolean>>({})
 
   const activeCourse = courses.find((c) => c.id === activeCourseId)!
   const activeLesson =
@@ -24,7 +25,7 @@ export function CoursesLearning() {
   )
 
   const markCompleted = (lessonId: string) => {
-    setCompleted((prev) => ({ ...prev, [lessonId]: true }))
+    setLessonCompleted(lessonId)
   }
 
   const selectCourse = (courseId: string) => {
