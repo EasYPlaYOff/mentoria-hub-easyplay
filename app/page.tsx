@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { SiteHeader, type Tab } from "@/components/site-header"
 import { HomeView } from "@/components/home-view"
+import { CoursesLearning } from "@/components/courses-learning"
 import { CoursesView } from "@/components/courses-view"
 import { DashboardView } from "@/components/dashboard-view"
 import { AdminView } from "@/components/admin-view"
@@ -28,14 +29,15 @@ export default function Page() {
       {activeTab === "home" && (
         <HomeView onStart={() => setActiveTab("courses")} />
       )}
-      {activeTab === "courses" && (
+      {activeTab === "courses" && <CoursesLearning />}
+      {activeTab === "catalog" && (
         <CoursesView savedIds={savedIds} onToggleSave={toggleSave} />
       )}
       {activeTab === "dashboard" && (
         <DashboardView
           savedIds={savedIds}
           onToggleSave={toggleSave}
-          onExplore={() => setActiveTab("courses")}
+          onExplore={() => setActiveTab("catalog")}
         />
       )}
       {activeTab === "admin" && <AdminView savedIds={savedIds} />}

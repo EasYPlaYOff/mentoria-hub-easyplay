@@ -4,11 +4,12 @@ import { useState } from "react"
 import { GraduationCap, Menu, X } from "lucide-react"
 import { cn } from "@/lib/utils"
 
-export type Tab = "home" | "courses" | "dashboard" | "admin"
+export type Tab = "home" | "courses" | "catalog" | "dashboard" | "admin"
 
 const tabs: { id: Tab; label: string }[] = [
   { id: "home", label: "Главная" },
   { id: "courses", label: "Курсы" },
+  { id: "catalog", label: "Каталог" },
   { id: "dashboard", label: "Личный кабинет" },
   { id: "admin", label: "Админка" },
 ]
