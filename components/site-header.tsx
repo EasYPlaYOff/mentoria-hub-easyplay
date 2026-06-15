@@ -1,8 +1,9 @@
 "use client"
 
 import { useState } from "react"
-import { GraduationCap, Menu, X } from "lucide-react"
+import { GraduationCap, Menu, X, LogOut } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { useStore } from "@/lib/store"
 
 export type Tab = "home" | "courses" | "catalog" | "dashboard" | "admin"
 
@@ -21,12 +22,22 @@ type SiteHeaderProps = {
 }
 
 export function SiteHeader({ active, onChange, savedCount }: SiteHeaderProps) {
+  const { user, logout } = useStore()
   const [mobileOpen, setMobileOpen] = useState(false)
 
   const handleSelect = (tab: Tab) => {
     onChange(tab)
     setMobileOpen(false)
   }
+
+  const initials = user?.name
+    ? user.name
+        .split(" ")
+        .map((p) => p[0])
+        .slice(0, 2)
+        .join("")
+        .toUpperCase()
+    : "?"
 
   return (
     <header className="sticky top-0 z-50 border-b border-border bg-background/80 backdrop-blur">
@@ -44,28 +55,46 @@ export function SiteHeader({ active, onChange, savedCount }: SiteHeaderProps) {
           </span>
         </button>
 
-        <nav className="hidden items-center gap-1 md:flex">
-          {tabs.map((tab) => (
-            <button
-              key={tab.id}
-              type="button"
-              onClick={() => handleSelect(tab.id)}
-              className={cn(
-                "relative rounded-lg px-3 py-2 text-sm font-medium transition-colors",
-                active === tab.id
-                  ? "bg-primary/15 text-primary"
-                  : "text-muted-foreground hover:text-foreground",
-              )}
+        <div className="hidden items-center gap-2 md:flex">
+          <nav className="flex items-center gap-1">
+            {tabs.map((tab) => (
+              <button
+                key={tab.id}
+                type="button"
+                onClick={() => handleSelect(tab.id)}
+                className={cn(
+                  "relative rounded-lg px-3 py-2 text-sm font-medium transition-colors",
+                  active === tab.id
+                    ? "bg-primary/15 text-primary"
+                    : "text-muted-foreground hover:text-foreground",
+                )}
+              >
+                {tab.label}
+                {tab.id === "dashboard" && savedCount > 0 && (
+                  <span className="ml-1.5 inline-flex min-w-5 items-center justify-center rounded-full bg-primary px-1.5 text-xs font-semibold text-primary-foreground">
+                    {savedCount}
+                  </span>
+                )}
+              </button>
+            ))}
+          </nav>
+          <div className="ml-2 flex items-center gap-2 border-l border-border pl-3">
+            <span
+              className="inline-flex size-8 items-center justify-center rounded-full bg-primary/15 text-xs font-bold text-primary"
+              title={user?.name ?? ""}
             >
-              {tab.label}
-              {tab.id === "dashboard" && savedCount > 0 && (
-                <span className="ml-1.5 inline-flex min-w-5 items-center justify-center rounded-full bg-primary px-1.5 text-xs font-semibold text-primary-foreground">
-                  {savedCount}
-                </span>
-              )}
+              {initials}
+            </span>
+            <button
+              type="button"
+              onClick={logout}
+              className="inline-flex items-center gap-1.5 rounded-lg px-2.5 py-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+            >
+              <LogOut className="size-4" aria-hidden="true" />
+              Выйти
             </button>
-          ))}
-        </nav>
+          </div>
+        </div>
 
         <button
           type="button"
@@ -105,6 +134,17 @@ export function SiteHeader({ active, onChange, savedCount }: SiteHeaderProps) {
                 )}
               </button>
             ))}
+            <button
+              type="button"
+              onClick={() => {
+                setMobileOpen(false)
+                logout()
+              }}
+              className="mt-1 flex items-center gap-2 rounded-lg border-t border-border px-3 py-3 text-left text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+            >
+              <LogOut className="size-4" aria-hidden="true" />
+              Выйти ({user?.name})
+            </button>
           </div>
         </nav>
       )}
