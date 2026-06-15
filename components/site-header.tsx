@@ -4,15 +4,16 @@ import { useState } from "react"
 import { GraduationCap, Menu, X, LogOut } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useStore } from "@/lib/store"
+import { useT, LANGUAGES } from "@/lib/i18n"
 
 export type Tab = "home" | "courses" | "catalog" | "dashboard" | "admin"
 
-const tabs: { id: Tab; label: string }[] = [
-  { id: "home", label: "Главная" },
-  { id: "courses", label: "Курсы" },
-  { id: "catalog", label: "Каталог" },
-  { id: "dashboard", label: "Личный кабинет" },
-  { id: "admin", label: "Админка" },
+const tabDefs: { id: Tab; labelKey: string }[] = [
+  { id: "home", labelKey: "nav.home" },
+  { id: "courses", labelKey: "nav.courses" },
+  { id: "catalog", labelKey: "nav.catalog" },
+  { id: "dashboard", labelKey: "nav.dashboard" },
+  { id: "admin", labelKey: "nav.admin" },
 ]
 
 type SiteHeaderProps = {
@@ -21,9 +22,38 @@ type SiteHeaderProps = {
   savedCount: number
 }
 
+function LangSwitcher() {
+  const { lang, setLang } = useStore()
+  return (
+    <div className="inline-flex items-center rounded-lg border border-border bg-card p-0.5">
+      {LANGUAGES.map((l) => (
+        <button
+          key={l.code}
+          type="button"
+          onClick={() => setLang(l.code)}
+          className={cn(
+            "rounded-md px-2 py-1 text-xs font-semibold transition-colors",
+            lang === l.code
+              ? "bg-primary text-primary-foreground"
+              : "text-muted-foreground hover:text-foreground",
+          )}
+        >
+          {l.label}
+        </button>
+      ))}
+    </div>
+  )
+}
+
 export function SiteHeader({ active, onChange, savedCount }: SiteHeaderProps) {
   const { user, logout } = useStore()
+  const t = useT()
   const [mobileOpen, setMobileOpen] = useState(false)
+
+  // Admin tab is hidden unless the user holds the admin role.
+  const tabs = tabDefs.filter(
+    (tab) => tab.id !== "admin" || user?.role === "admin",
+  )
 
   const handleSelect = (tab: Tab) => {
     onChange(tab)
@@ -69,7 +99,7 @@ export function SiteHeader({ active, onChange, savedCount }: SiteHeaderProps) {
                     : "text-muted-foreground hover:text-foreground",
                 )}
               >
-                {tab.label}
+                {t(tab.labelKey)}
                 {tab.id === "dashboard" && savedCount > 0 && (
                   <span className="ml-1.5 inline-flex min-w-5 items-center justify-center rounded-full bg-primary px-1.5 text-xs font-semibold text-primary-foreground">
                     {savedCount}
@@ -78,6 +108,9 @@ export function SiteHeader({ active, onChange, savedCount }: SiteHeaderProps) {
               </button>
             ))}
           </nav>
+          <div className="ml-2 border-l border-border pl-3">
+            <LangSwitcher />
+          </div>
           <div className="ml-2 flex items-center gap-2 border-l border-border pl-3">
             <span
               className="inline-flex size-8 items-center justify-center rounded-full bg-primary/15 text-xs font-bold text-primary"
@@ -91,7 +124,7 @@ export function SiteHeader({ active, onChange, savedCount }: SiteHeaderProps) {
               className="inline-flex items-center gap-1.5 rounded-lg px-2.5 py-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
             >
               <LogOut className="size-4" aria-hidden="true" />
-              Выйти
+              {t("nav.logout")}
             </button>
           </div>
         </div>
@@ -114,6 +147,12 @@ export function SiteHeader({ active, onChange, savedCount }: SiteHeaderProps) {
       {mobileOpen && (
         <nav className="border-t border-border md:hidden">
           <div className="mx-auto flex max-w-6xl flex-col px-4 py-2 sm:px-6">
+            <div className="flex items-center justify-between px-3 py-3">
+              <span className="text-sm font-medium text-muted-foreground">
+                Язык / Language
+              </span>
+              <LangSwitcher />
+            </div>
             {tabs.map((tab) => (
               <button
                 key={tab.id}
@@ -126,7 +165,7 @@ export function SiteHeader({ active, onChange, savedCount }: SiteHeaderProps) {
                     : "text-muted-foreground hover:text-foreground",
                 )}
               >
-                {tab.label}
+                {t(tab.labelKey)}
                 {tab.id === "dashboard" && savedCount > 0 && (
                   <span className="inline-flex min-w-5 items-center justify-center rounded-full bg-primary px-1.5 text-xs font-semibold text-primary-foreground">
                     {savedCount}

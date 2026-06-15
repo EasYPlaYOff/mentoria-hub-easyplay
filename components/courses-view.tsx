@@ -5,10 +5,12 @@ import { Sparkles } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { categories, type Category } from "@/lib/opportunities"
 import { useStore } from "@/lib/store"
+import { useT } from "@/lib/i18n"
 import { OpportunityCard } from "@/components/opportunity-card"
 
 export function CoursesView() {
   const { opportunities, savedIds, user, toggleSave } = useStore()
+  const t = useT()
   const [activeFilter, setActiveFilter] = useState<"Все" | Category>("Все")
 
   const interests = user?.interests ?? []
@@ -31,16 +33,15 @@ export function CoursesView() {
     <section className="mx-auto w-full max-w-6xl px-4 py-10 sm:px-6 lg:py-14">
       <div className="mb-8">
         <h1 className="text-balance text-3xl font-bold tracking-tight sm:text-4xl">
-          Каталог возможностей
+          {t("catalog.title")}
         </h1>
         <p className="mt-2 max-w-2xl text-pretty leading-relaxed text-muted-foreground">
-          Олимпиады, хакатоны, акселераторы и интенсивы для школьников.
-          Выбирай направление и сохраняй то, что интересно.
+          {t("catalog.subtitle")}
         </p>
         {interests.length > 0 && (
           <p className="mt-3 inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-3.5 py-1.5 text-sm font-medium text-primary">
             <Sparkles className="size-4" aria-hidden="true" />
-            Рекомендации подобраны по интересам: {interests.join(", ")}
+            {t("catalog.recPrefix")} {interests.join(", ")}
           </p>
         )}
       </div>
@@ -58,7 +59,7 @@ export function CoursesView() {
                 : "border-border bg-card text-muted-foreground hover:border-primary/50 hover:text-foreground",
             )}
           >
-            {cat}
+            {cat === "Все" ? t("filter.all") : cat}
           </button>
         ))}
       </div>

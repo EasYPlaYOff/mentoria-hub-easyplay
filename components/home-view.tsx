@@ -10,6 +10,7 @@ import {
   Trophy,
 } from "lucide-react"
 import { useStore } from "@/lib/store"
+import { useT } from "@/lib/i18n"
 import { OpportunityCard } from "@/components/opportunity-card"
 
 type HomeViewProps = {
@@ -37,6 +38,7 @@ const reasons = [
 
 export function HomeView({ onStart, onExplore }: HomeViewProps) {
   const { opportunities, savedIds, user, toggleSave } = useStore()
+  const t = useT()
   const interests = user?.interests ?? []
 
   // Show all 9 opportunities, with cards matching the student's interests first.
@@ -54,16 +56,13 @@ export function HomeView({ onStart, onExplore }: HomeViewProps) {
         <div>
           <span className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-4 py-1.5 text-sm font-medium text-primary">
             <Sparkles className="size-4" aria-hidden="true" />
-            Для школьников 8–11 классов
+            {t("home.badge")}
           </span>
           <h1 className="mt-5 text-balance text-4xl font-bold leading-tight tracking-tight sm:text-5xl">
-            Все образовательные возможности и асинхронное обучение для
-            школьников Казахстана в одном месте
+            {t("home.title")}
           </h1>
           <p className="mt-5 max-w-xl text-pretty text-lg leading-relaxed text-muted-foreground">
-            Mentoria Hub помогает найти олимпиады, хакатоны и менторские
-            программы, чтобы строить сильное портфолио и поступать туда, куда
-            мечтаешь.
+            {t("home.subtitle")}
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
             <button
@@ -71,7 +70,7 @@ export function HomeView({ onStart, onExplore }: HomeViewProps) {
               onClick={onStart}
               className="inline-flex items-center gap-2 rounded-xl bg-primary px-6 py-3 text-base font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
             >
-              Начать обучение
+              {t("home.cta")}
               <ArrowRight className="size-5" aria-hidden="true" />
             </button>
           </div>
@@ -93,11 +92,10 @@ export function HomeView({ onStart, onExplore }: HomeViewProps) {
 
       <section className="border-t border-border py-12 lg:py-16">
         <h2 className="text-balance text-3xl font-bold tracking-tight">
-          Почему Mentoria Hub?
+          {t("home.why")}
         </h2>
         <p className="mt-2 max-w-2xl text-pretty leading-relaxed text-muted-foreground">
-          Мы создали платформу для учеников 8–11 классов, чтобы образование за
-          пределами школы было доступным, понятным и вдохновляющим.
+          {t("home.whySubtitle")}
         </p>
         <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {reasons.map((reason) => (
@@ -123,12 +121,12 @@ export function HomeView({ onStart, onExplore }: HomeViewProps) {
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
             <h2 className="text-balance text-3xl font-bold tracking-tight">
-              Рекомендовано для тебя
+              {t("home.rec")}
             </h2>
             <p className="mt-2 max-w-2xl text-pretty leading-relaxed text-muted-foreground">
               {interests.length > 0
-                ? `Подобрано по твоим интересам: ${interests.join(", ")}.`
-                : "Возможности, которые помогут построить сильное портфолио."}
+                ? `${t("home.recInterests")} ${interests.join(", ")}.`
+                : t("home.recDefault")}
             </p>
           </div>
           <button
@@ -136,7 +134,7 @@ export function HomeView({ onStart, onExplore }: HomeViewProps) {
             onClick={onExplore}
             className="inline-flex items-center gap-2 rounded-xl border border-border bg-card px-5 py-2.5 text-sm font-semibold text-foreground transition-colors hover:border-primary/50"
           >
-            Весь каталог
+            {t("home.allCatalog")}
             <ArrowRight className="size-4" aria-hidden="true" />
           </button>
         </div>

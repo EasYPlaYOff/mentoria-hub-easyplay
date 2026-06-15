@@ -123,6 +123,38 @@ export function AuthView() {
               />
             </Field>
 
+            {!showCode ? (
+              <button
+                type="button"
+                onClick={() => setShowCode(true)}
+                className="inline-flex items-center gap-1.5 text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
+              >
+                <KeyRound className="size-4" aria-hidden="true" />
+                У меня есть код организации
+              </button>
+            ) : (
+              <div className="rounded-xl border border-border bg-background/50 p-4">
+                <Field
+                  icon={<ShieldCheck className="size-4" aria-hidden="true" />}
+                  label="Код организации"
+                >
+                  <input
+                    type="text"
+                    value={orgCode}
+                    onChange={(e) => setOrgCode(e.target.value)}
+                    placeholder="Введите код"
+                    className="w-full bg-transparent text-sm outline-none placeholder:text-muted-foreground"
+                  />
+                </Field>
+                {isValidAdmin && (
+                  <p className="mt-2 flex items-center gap-1.5 text-sm font-medium text-[var(--chart-4)]">
+                    <ShieldCheck className="size-4" aria-hidden="true" />
+                    Код подтверждён — будет создан профиль администратора.
+                  </p>
+                )}
+              </div>
+            )}
+
             {error && (
               <p className="text-sm font-medium text-destructive">{error}</p>
             )}
