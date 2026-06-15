@@ -1,8 +1,16 @@
 "use client"
 
 import { useState, type FormEvent, type ReactNode } from "react"
-import { GraduationCap, Mail, Lock, User as UserIcon, Sparkles } from "lucide-react"
-import { useStore } from "@/lib/store"
+import {
+  GraduationCap,
+  Mail,
+  Lock,
+  User as UserIcon,
+  Sparkles,
+  KeyRound,
+  ShieldCheck,
+} from "lucide-react"
+import { useStore, ADMIN_CODE } from "@/lib/store"
 
 export function AuthView() {
   const { register } = useStore()
@@ -10,6 +18,10 @@ export function AuthView() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [error, setError] = useState("")
+  const [showCode, setShowCode] = useState(false)
+  const [orgCode, setOrgCode] = useState("")
+
+  const isValidAdmin = orgCode.trim() === ADMIN_CODE
 
   const onSubmit = (e: FormEvent) => {
     e.preventDefault()
@@ -17,8 +29,17 @@ export function AuthView() {
       setError("Заполни все поля. Пароль — минимум 4 символа.")
       return
     }
+    if (showCode && orgCode.trim() && !isValidAdmin) {
+      setError("Неверный код организации.")
+      return
+    }
     setError("")
-    register(name.trim(), email.trim(), password)
+    register(
+      name.trim(),
+      email.trim(),
+      password,
+      isValidAdmin ? "admin" : "student",
+    )
   }
 
   return (

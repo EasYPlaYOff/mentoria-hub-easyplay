@@ -7,6 +7,7 @@ export type Opportunity = {
   grades: string
   deadline: string
   description: string
+  applyUrl?: string
 }
 
 export const categories: Array<"Все" | Category> = [
@@ -24,6 +25,7 @@ export const opportunities: Opportunity[] = [
     grades: "Классы: 9–11",
     deadline: "25 июня 2026",
     description: "Главная научно-математическая олимпиада.",
+    applyUrl: "https://daryn.kz",
   },
   {
     id: 2,
@@ -32,6 +34,7 @@ export const opportunities: Opportunity[] = [
     grades: "Все классы",
     deadline: "18 июня 2026",
     description: "Создание MVP с использованием искусственного интеллекта.",
+    applyUrl: "https://astanahub.com",
   },
   {
     id: 3,
@@ -40,6 +43,7 @@ export const opportunities: Opportunity[] = [
     grades: "Классы: 10–11",
     deadline: "1 июля 2026",
     description: "Интенсив по запуску первых бизнес-проектов.",
+    applyUrl: "https://nu.edu.kz",
   },
   {
     id: 4,
@@ -48,6 +52,7 @@ export const opportunities: Opportunity[] = [
     grades: "Классы: 8–11",
     deadline: "30 июня 2026",
     description: "Главное соревнование для юных программистов.",
+    applyUrl: "https://daryn.kz",
   },
   {
     id: 5,
@@ -56,6 +61,7 @@ export const opportunities: Opportunity[] = [
     grades: "Классы: 9–11",
     deadline: "12 июля 2026",
     description: "Исследования и социальные проекты для молодежи.",
+    applyUrl: "https://astanahub.com",
   },
   {
     id: 6,
@@ -64,6 +70,7 @@ export const opportunities: Opportunity[] = [
     grades: "Класс: 11",
     deadline: "20 июня 2026",
     description: "Олимпиада для поступления на грант в КБТУ.",
+    applyUrl: "https://kbtu.edu.kz",
   },
   {
     id: 7,
@@ -72,6 +79,7 @@ export const opportunities: Opportunity[] = [
     grades: "Классы: 8–11",
     deadline: "5 июля 2026",
     description: "Решение экологических и геологических задач.",
+    applyUrl: "https://astanahub.com",
   },
   {
     id: 8,
@@ -80,6 +88,7 @@ export const opportunities: Opportunity[] = [
     grades: "Классы: 9–11",
     deadline: "15 июля 2026",
     description: "Менторская программа для будущих лидеров.",
+    applyUrl: "https://astanahub.com",
   },
   {
     id: 9,
@@ -88,6 +97,7 @@ export const opportunities: Opportunity[] = [
     grades: "Классы: 8–10",
     deadline: "22 июня 2026",
     description: "Быстрый старт во фронтенд-разработке.",
+    applyUrl: "https://astanahub.com",
   },
 ]
 

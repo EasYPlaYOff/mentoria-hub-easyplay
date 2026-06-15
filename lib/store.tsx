@@ -20,10 +20,15 @@ export type Goal =
   | "Участие в хакатонах/олимпиадах"
   | "Поиск стажировок"
 
+export type Role = "student" | "admin"
+
+export type Lang = "kz" | "ru" | "en"
+
 export type User = {
   name: string
   email: string
   password: string
+  role: Role
   grade: string | null
   interests: Category[]
   goal: Goal | null
@@ -35,20 +40,31 @@ type PersistedState = {
   savedIds: number[]
   progress: Record<string, boolean>
   opportunities: Opportunity[]
+  telegramConnected: boolean
+  lang: Lang
 }
 
 const STORAGE_KEY = "mentoria-hub-state"
+
+export const ADMIN_CODE = "MENTORIA_ADMIN_2026"
 
 const defaultState: PersistedState = {
   user: null,
   savedIds: [],
   progress: {},
   opportunities: seedOpportunities,
+  telegramConnected: false,
+  lang: "ru",
 }
 
 type StoreContextValue = PersistedState & {
   hydrated: boolean
-  register: (name: string, email: string, password: string) => void
+  register: (
+    name: string,
+    email: string,
+    password: string,
+    role?: Role,
+  ) => void
   completeOnboarding: (
     grade: string,
     interests: Category[],
@@ -59,6 +75,8 @@ type StoreContextValue = PersistedState & {
   removeSave: (id: number) => void
   setLessonCompleted: (lessonId: string) => void
   addOpportunity: (opp: Omit<Opportunity, "id">) => void
+  connectTelegram: () => void
+  setLang: (lang: Lang) => void
 }
 
 const StoreContext = createContext<StoreContextValue | null>(null)
@@ -74,7 +92,9 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       if (raw) {
         const parsed = JSON.parse(raw) as Partial<PersistedState>
         setState({
-          user: parsed.user ?? null,
+          user: parsed.user
+            ? { role: "student", ...parsed.user }
+            : null,
           savedIds: parsed.savedIds ?? [],
           progress: parsed.progress ?? {},
           // merge seed with any custom opportunities saved by the admin
@@ -82,6 +102,8 @@ export function StoreProvider({ children }: { children: ReactNode }) {
             parsed.opportunities && parsed.opportunities.length > 0
               ? parsed.opportunities
               : seedOpportunities,
+          telegramConnected: parsed.telegramConnected ?? false,
+          lang: parsed.lang ?? "ru",
         })
       }
     } catch {
@@ -101,13 +123,14 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   }, [state, hydrated])
 
   const register = useCallback(
-    (name: string, email: string, password: string) => {
+    (name: string, email: string, password: string, role: Role = "student") => {
       setState((prev) => ({
         ...prev,
         user: {
           name,
           email,
           password,
+          role,
           grade: null,
           interests: [],
           goal: null,
@@ -170,6 +193,14 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     })
   }, [])
 
+  const connectTelegram = useCallback(() => {
+    setState((prev) => ({ ...prev, telegramConnected: true }))
+  }, [])
+
+  const setLang = useCallback((lang: Lang) => {
+    setState((prev) => ({ ...prev, lang }))
+  }, [])
+
   const value = useMemo<StoreContextValue>(
     () => ({
       ...state,
@@ -181,6 +212,8 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       removeSave,
       setLessonCompleted,
       addOpportunity,
+      connectTelegram,
+      setLang,
     }),
     [
       state,
@@ -192,6 +225,8 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       removeSave,
       setLessonCompleted,
       addOpportunity,
+      connectTelegram,
+      setLang,
     ],
   )
 

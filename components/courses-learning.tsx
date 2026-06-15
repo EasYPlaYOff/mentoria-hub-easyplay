@@ -5,9 +5,11 @@ import { Check, ChevronDown, PlayCircle } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { courses, type Lesson } from "@/lib/courses"
 import { useStore } from "@/lib/store"
+import { useT } from "@/lib/i18n"
 
 export function CoursesLearning() {
   const { progress: completed, setLessonCompleted } = useStore()
+  const t = useT()
   const [activeCourseId, setActiveCourseId] = useState(courses[0].id)
   const [activeLessonId, setActiveLessonId] = useState(courses[0].lessons[0].id)
   const [openCourseId, setOpenCourseId] = useState<string | null>(courses[0].id)
@@ -39,11 +41,10 @@ export function CoursesLearning() {
     <section className="mx-auto w-full max-w-6xl px-4 py-8 sm:px-6 lg:py-12">
       <div className="mb-8">
         <h1 className="text-balance text-3xl font-bold tracking-tight sm:text-4xl">
-          Курсы
+          {t("courses.title")}
         </h1>
         <p className="mt-2 max-w-2xl text-pretty leading-relaxed text-muted-foreground">
-          Асинхронное обучение: смотрите видео, читайте конспекты и проходите
-          мини-тесты. Прогресс растёт по мере правильных ответов.
+          {t("courses.subtitle")}
         </p>
       </div>
 
@@ -196,19 +197,17 @@ function LessonContent({
       </h2>
 
       {/* Video player */}
-      <a
-        href={lesson.videoUrl}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="group mt-5 flex aspect-video w-full flex-col items-center justify-center gap-3 overflow-hidden rounded-xl border border-border bg-gradient-to-br from-secondary to-background transition-colors hover:border-primary/50"
-      >
-        <span className="inline-flex size-16 items-center justify-center rounded-full bg-primary text-primary-foreground transition-transform group-hover:scale-110">
-          <PlayCircle className="size-9" aria-hidden="true" />
-        </span>
-        <span className="px-6 text-center text-sm font-medium text-muted-foreground">
-          Смотреть видеолекцию
-        </span>
-      </a>
+      <div className="mt-5 aspect-video w-full overflow-hidden rounded-xl border border-border bg-black">
+        <iframe
+          key={lesson.videoUrl}
+          src={lesson.videoUrl}
+          title={lesson.title}
+          className="size-full"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          allowFullScreen
+          referrerPolicy="strict-origin-when-cross-origin"
+        />
+      </div>
 
       {/* Summary */}
       <div className="mt-6 space-y-4">

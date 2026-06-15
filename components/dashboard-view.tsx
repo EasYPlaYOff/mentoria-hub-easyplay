@@ -8,17 +8,31 @@ import {
   GraduationCap,
   Target,
   BookOpen,
+  Send,
+  Check,
 } from "lucide-react"
 import { useStore, parseDeadline } from "@/lib/store"
+import { useT } from "@/lib/i18n"
 import { courses } from "@/lib/courses"
 import { OpportunityCard } from "@/components/opportunity-card"
+
+const TELEGRAM_BOT_URL = "https://t.me/Mentoria_hub_bot"
 
 type DashboardViewProps = {
   onExplore: () => void
 }
 
 export function DashboardView({ onExplore }: DashboardViewProps) {
-  const { user, opportunities, savedIds, progress, toggleSave } = useStore()
+  const {
+    user,
+    opportunities,
+    savedIds,
+    progress,
+    toggleSave,
+    telegramConnected,
+    connectTelegram,
+  } = useStore()
+  const t = useT()
 
   const saved = useMemo(
     () => opportunities.filter((o) => savedIds.includes(o.id)),
@@ -57,7 +71,7 @@ export function DashboardView({ onExplore }: DashboardViewProps) {
       <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
         <div>
           <h1 className="text-balance text-3xl font-bold tracking-tight sm:text-4xl">
-            Привет, {user?.name}!
+            {t("dashboard.greeting")}, {user?.name}!
           </h1>
           <div className="mt-3 flex flex-wrap gap-2">
             {user?.grade && (
@@ -76,7 +90,7 @@ export function DashboardView({ onExplore }: DashboardViewProps) {
         </div>
         <div className="rounded-2xl border border-border bg-card px-5 py-3 text-center">
           <p className="text-3xl font-bold text-primary">{saved.length}</p>
-          <p className="text-xs text-muted-foreground">в избранном</p>
+          <p className="text-xs text-muted-foreground">{t("dashboard.saved")}</p>
         </div>
       </div>
 
@@ -85,7 +99,7 @@ export function DashboardView({ onExplore }: DashboardViewProps) {
         <div className="rounded-2xl border border-border bg-card p-6">
           <div className="flex items-center gap-2">
             <CalendarClock className="size-5 text-primary" aria-hidden="true" />
-            <h2 className="text-lg font-semibold">Приближающиеся дедлайны</h2>
+            <h2 className="text-lg font-semibold">{t("dashboard.deadlines")}</h2>
           </div>
           {deadlines.length === 0 ? (
             <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
@@ -114,7 +128,7 @@ export function DashboardView({ onExplore }: DashboardViewProps) {
         <div className="rounded-2xl border border-border bg-card p-6 lg:col-span-2">
           <div className="flex items-center gap-2">
             <BookOpen className="size-5 text-primary" aria-hidden="true" />
-            <h2 className="text-lg font-semibold">Мои курсы</h2>
+            <h2 className="text-lg font-semibold">{t("dashboard.myCourses")}</h2>
           </div>
           <div className="mt-5 flex flex-col gap-5">
             {courseProgress.map((c) => (
@@ -143,10 +157,43 @@ export function DashboardView({ onExplore }: DashboardViewProps) {
         </div>
       </div>
 
+      {/* Telegram bot */}
+      <div className="mt-6 flex flex-col gap-4 rounded-2xl border border-border bg-card p-6 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex items-start gap-3">
+          <span className="inline-flex shrink-0 rounded-xl bg-primary/15 p-2.5 text-primary">
+            <Send className="size-5" aria-hidden="true" />
+          </span>
+          <div>
+            <h2 className="text-lg font-semibold">{t("dashboard.tgTitle")}</h2>
+            <p className="mt-1 max-w-md text-sm leading-relaxed text-muted-foreground">
+              {t("dashboard.tgText")}
+            </p>
+          </div>
+        </div>
+
+        {telegramConnected ? (
+          <span className="inline-flex shrink-0 items-center gap-2 rounded-xl border border-[var(--chart-4)]/40 bg-[var(--chart-4)]/10 px-5 py-2.5 text-sm font-semibold text-[var(--chart-4)]">
+            <Check className="size-4" strokeWidth={3} aria-hidden="true" />
+            {t("dashboard.tgConnected")}
+          </span>
+        ) : (
+          <a
+            href={TELEGRAM_BOT_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={connectTelegram}
+            className="inline-flex shrink-0 items-center justify-center gap-2 rounded-xl bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
+          >
+            <Send className="size-4" aria-hidden="true" />
+            {t("dashboard.tgConnect")}
+          </a>
+        )}
+      </div>
+
       {/* Saved opportunities */}
       <div className="mt-10">
         <h2 className="text-balance text-2xl font-bold tracking-tight">
-          Мои сохранённые возможности
+          {t("dashboard.savedTitle")}
         </h2>
 
         {saved.length === 0 ? (
@@ -165,7 +212,7 @@ export function DashboardView({ onExplore }: DashboardViewProps) {
               className="mt-6 inline-flex items-center gap-2 rounded-xl bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
             >
               <Compass className="size-4" aria-hidden="true" />
-              Открыть каталог
+              {t("dashboard.openCatalog")}
             </button>
           </div>
         ) : (

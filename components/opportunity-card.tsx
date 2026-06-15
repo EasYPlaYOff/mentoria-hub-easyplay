@@ -1,8 +1,16 @@
 "use client"
 
-import { Check, CalendarDays, GraduationCap, Heart, Sparkles } from "lucide-react"
+import {
+  Check,
+  CalendarDays,
+  GraduationCap,
+  Heart,
+  Sparkles,
+  ExternalLink,
+} from "lucide-react"
 import { cn } from "@/lib/utils"
 import { categoryColors, type Opportunity } from "@/lib/opportunities"
+import { useT } from "@/lib/i18n"
 
 type OpportunityCardProps = {
   opportunity: Opportunity
@@ -17,6 +25,7 @@ export function OpportunityCard({
   onToggleSave,
   recommended = false,
 }: OpportunityCardProps) {
+  const t = useT()
   return (
     <article
       className={cn(
@@ -37,7 +46,7 @@ export function OpportunityCard({
           {recommended && (
             <span className="inline-flex items-center gap-1 rounded-full border border-primary/30 bg-primary/10 px-2.5 py-1 text-xs font-medium text-primary">
               <Sparkles className="size-3" aria-hidden="true" />
-              Для тебя
+              {t("card.forYou")}
             </span>
           )}
         </div>
@@ -84,6 +93,18 @@ export function OpportunityCard({
           </>
         )}
       </button>
+
+      {opportunity.applyUrl && (
+        <a
+          href={opportunity.applyUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mt-2.5 inline-flex w-full items-center justify-center gap-2 rounded-xl border border-border px-4 py-2.5 text-sm font-semibold text-foreground transition-colors hover:border-primary/50 hover:text-primary"
+        >
+          <ExternalLink className="size-4" aria-hidden="true" />
+          {t("card.apply")}
+        </a>
+      )}
     </article>
   )
 }
