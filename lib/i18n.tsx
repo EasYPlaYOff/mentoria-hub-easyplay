@@ -17,7 +17,43 @@ const ru: Dict = {
   "nav.catalog": "Каталог",
   "nav.dashboard": "Личный кабинет",
   "nav.admin": "Админка",
+  "nav.p2p": "P2P Помощь",
+  "nav.volunteer": "Панель волонтера",
   "nav.logout": "Выйти",
+
+  "p2p.title": "P2P Помощь",
+  "p2p.subtitle":
+    "Бесплатные онлайн-уроки от волонтеров и живой чат с теми, кто готов помочь прямо сейчас.",
+  "p2p.scheduleTitle": "Расписание онлайн-уроков",
+  "p2p.scheduleSubtitle": "Ближайшие бесплатные вебинары от волонтеров.",
+  "p2p.enroll": "Записаться",
+  "p2p.enrolled": "Вы записаны ✓",
+  "p2p.chatTitle": "Чат с волонтерами",
+  "p2p.chatSubtitle": "Задай вопрос — свободный волонтер ответит.",
+  "p2p.chatPlaceholder": "Напиши свой вопрос…",
+  "p2p.send": "Отправить",
+  "p2p.chatGreeting":
+    "Привет! Это команда волонтеров Mentoria. С чем нужна помощь?",
+  "p2p.volunteerReply":
+    "Привет! Я свободен в это время, давай разберем эту задачу в Zoom!",
+  "p2p.you": "Вы",
+
+  "vol.title": "Панель волонтера",
+  "vol.subtitle":
+    "Помогай ученикам: отвечай на активные вопросы и создавай свои онлайн-уроки.",
+  "vol.feedTitle": "Лента активных вопросов",
+  "vol.feedSubtitle": "Ученики, которым нужна помощь прямо сейчас.",
+  "vol.respond": "Откликнуться",
+  "vol.responded": "Вы связались с учеником ✓",
+  "vol.empty": "Сейчас нет активных вопросов. Загляни позже!",
+  "vol.createTitle": "Создать онлайн-урок",
+  "vol.createSubtitle": "Урок появится в расписании у всех учеников.",
+  "vol.lessonTopic": "Тема урока",
+  "vol.lessonSubject": "Предмет",
+  "vol.lessonTime": "Дата и время",
+  "vol.create": "Создать урок",
+  "vol.created": "Урок создан и опубликован!",
+  "vol.myLessons": "Опубликованные уроки",
 
   "home.badge": "Для школьников 8–11 классов",
   "home.title":
@@ -69,7 +105,43 @@ const kz: Dict = {
   "nav.catalog": "Каталог",
   "nav.dashboard": "Жеке кабинет",
   "nav.admin": "Әкімшілік",
+  "nav.p2p": "P2P Көмек",
+  "nav.volunteer": "Волонтер панелі",
   "nav.logout": "Шығу",
+
+  "p2p.title": "P2P Көмек",
+  "p2p.subtitle":
+    "Волонтерлерден тегін онлайн сабақтар және дәл қазір көмектесуге дайын адамдармен тікелей чат.",
+  "p2p.scheduleTitle": "Онлайн сабақтар кестесі",
+  "p2p.scheduleSubtitle": "Волонтерлерден жақын арадағы тегін вебинарлар.",
+  "p2p.enroll": "Жазылу",
+  "p2p.enrolled": "Сіз жазылдыңыз ✓",
+  "p2p.chatTitle": "Волонтерлермен чат",
+  "p2p.chatSubtitle": "Сұрақ қой — бос волонтер жауап береді.",
+  "p2p.chatPlaceholder": "Сұрағыңды жаз…",
+  "p2p.send": "Жіберу",
+  "p2p.chatGreeting":
+    "Сәлем! Бұл Mentoria волонтерлер командасы. Қандай көмек керек?",
+  "p2p.volunteerReply":
+    "Сәлем! Мен осы уақытта боспын, бұл есепті Zoom-да талдайық!",
+  "p2p.you": "Сіз",
+
+  "vol.title": "Волонтер панелі",
+  "vol.subtitle":
+    "Оқушыларға көмектес: белсенді сұрақтарға жауап бер және өз онлайн сабақтарыңды құр.",
+  "vol.feedTitle": "Белсенді сұрақтар лентасы",
+  "vol.feedSubtitle": "Дәл қазір көмек қажет оқушылар.",
+  "vol.respond": "Жауап беру",
+  "vol.responded": "Сіз оқушымен байланыстыңыз ✓",
+  "vol.empty": "Қазір белсенді сұрақтар жоқ. Кейінірек кіріп көр!",
+  "vol.createTitle": "Онлайн сабақ құру",
+  "vol.createSubtitle": "Сабақ барлық оқушылардың кестесінде пайда болады.",
+  "vol.lessonTopic": "Сабақ тақырыбы",
+  "vol.lessonSubject": "Пән",
+  "vol.lessonTime": "Күні мен уақыты",
+  "vol.create": "Сабақ құру",
+  "vol.created": "Сабақ құрылып, жарияланды!",
+  "vol.myLessons": "Жарияланған сабақтар",
 
   "home.badge": "8–11 сынып оқушыларына",
   "home.title":
@@ -121,7 +193,43 @@ const en: Dict = {
   "nav.catalog": "Catalog",
   "nav.dashboard": "Dashboard",
   "nav.admin": "Admin",
+  "nav.p2p": "P2P Help",
+  "nav.volunteer": "Volunteer panel",
   "nav.logout": "Log out",
+
+  "p2p.title": "P2P Help",
+  "p2p.subtitle":
+    "Free online lessons from volunteers and a live chat with people ready to help right now.",
+  "p2p.scheduleTitle": "Online lessons schedule",
+  "p2p.scheduleSubtitle": "Upcoming free webinars from volunteers.",
+  "p2p.enroll": "Enroll",
+  "p2p.enrolled": "You're enrolled ✓",
+  "p2p.chatTitle": "Chat with volunteers",
+  "p2p.chatSubtitle": "Ask a question — a free volunteer will reply.",
+  "p2p.chatPlaceholder": "Type your question…",
+  "p2p.send": "Send",
+  "p2p.chatGreeting":
+    "Hi! This is the Mentoria volunteer team. What do you need help with?",
+  "p2p.volunteerReply":
+    "Hi! I'm free at that time, let's work through this problem on Zoom!",
+  "p2p.you": "You",
+
+  "vol.title": "Volunteer panel",
+  "vol.subtitle":
+    "Help students: respond to active questions and create your own online lessons.",
+  "vol.feedTitle": "Active questions feed",
+  "vol.feedSubtitle": "Students who need help right now.",
+  "vol.respond": "Respond",
+  "vol.responded": "You've reached out to the student ✓",
+  "vol.empty": "No active questions right now. Check back later!",
+  "vol.createTitle": "Create an online lesson",
+  "vol.createSubtitle": "The lesson will appear in every student's schedule.",
+  "vol.lessonTopic": "Lesson topic",
+  "vol.lessonSubject": "Subject",
+  "vol.lessonTime": "Date and time",
+  "vol.create": "Create lesson",
+  "vol.created": "Lesson created and published!",
+  "vol.myLessons": "Published lessons",
 
   "home.badge": "For students in grades 8–11",
   "home.title":

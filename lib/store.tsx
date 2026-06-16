@@ -20,9 +20,25 @@ export type Goal =
   | "Участие в хакатонах/олимпиадах"
   | "Поиск стажировок"
 
-export type Role = "student" | "admin"
+export type Role = "student" | "volunteer" | "admin"
 
 export type Lang = "kz" | "ru" | "en"
+
+export type Lesson = {
+  id: string
+  title: string
+  volunteerName: string
+  time: string
+  subject: string
+}
+
+export type HelpRequest = {
+  id: string
+  studentName: string
+  subject: string
+  question: string
+  status: "open" | "responded"
+}
 
 export type User = {
   name: string
@@ -42,11 +58,62 @@ type PersistedState = {
   opportunities: Opportunity[]
   telegramConnected: boolean
   lang: Lang
+  lessons: Lesson[]
+  enrolledLessonIds: string[]
+  helpRequests: HelpRequest[]
 }
 
 const STORAGE_KEY = "mentoria-hub-state"
 
 export const ADMIN_CODE = "MENTORIA_ADMIN_2026"
+
+const seedLessons: Lesson[] = [
+  {
+    id: "l1",
+    title: "Разбор сложных задач по математике (ЕНТ)",
+    volunteerName: "Данияр",
+    time: "Сегодня, 18:00",
+    subject: "Математика",
+  },
+  {
+    id: "l2",
+    title: "Основы Python для начинающих",
+    volunteerName: "Аружан",
+    time: "Завтра, 16:30",
+    subject: "Программирование",
+  },
+  {
+    id: "l3",
+    title: "IELTS Writing: как писать эссе на 7+",
+    volunteerName: "Тимур",
+    time: "Суббота, 14:00",
+    subject: "Английский язык",
+  },
+]
+
+const seedHelpRequests: HelpRequest[] = [
+  {
+    id: "r1",
+    studentName: "Алия",
+    subject: "Физика",
+    question: "Не понимаю законы Ньютона, можешь объяснить на примерах?",
+    status: "open",
+  },
+  {
+    id: "r2",
+    studentName: "Ерлан",
+    subject: "Математика",
+    question: "Нужна помощь с производными перед контрольной завтра.",
+    status: "open",
+  },
+  {
+    id: "r3",
+    studentName: "Камила",
+    subject: "Химия",
+    question: "Как правильно балансировать уравнения реакций?",
+    status: "open",
+  },
+]
 
 const defaultState: PersistedState = {
   user: null,
@@ -55,6 +122,9 @@ const defaultState: PersistedState = {
   opportunities: seedOpportunities,
   telegramConnected: false,
   lang: "ru",
+  lessons: seedLessons,
+  enrolledLessonIds: [],
+  helpRequests: seedHelpRequests,
 }
 
 type StoreContextValue = PersistedState & {
@@ -77,6 +147,9 @@ type StoreContextValue = PersistedState & {
   addOpportunity: (opp: Omit<Opportunity, "id">) => void
   connectTelegram: () => void
   setLang: (lang: Lang) => void
+  enrollLesson: (lessonId: string) => void
+  addLesson: (lesson: Omit<Lesson, "id">) => void
+  respondToRequest: (requestId: string) => void
 }
 
 const StoreContext = createContext<StoreContextValue | null>(null)
@@ -104,6 +177,15 @@ export function StoreProvider({ children }: { children: ReactNode }) {
               : seedOpportunities,
           telegramConnected: parsed.telegramConnected ?? false,
           lang: parsed.lang ?? "ru",
+          lessons:
+            parsed.lessons && parsed.lessons.length > 0
+              ? parsed.lessons
+              : seedLessons,
+          enrolledLessonIds: parsed.enrolledLessonIds ?? [],
+          helpRequests:
+            parsed.helpRequests && parsed.helpRequests.length > 0
+              ? parsed.helpRequests
+              : seedHelpRequests,
         })
       }
     } catch {
@@ -201,6 +283,31 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     setState((prev) => ({ ...prev, lang }))
   }, [])
 
+  const enrollLesson = useCallback((lessonId: string) => {
+    setState((prev) => ({
+      ...prev,
+      enrolledLessonIds: prev.enrolledLessonIds.includes(lessonId)
+        ? prev.enrolledLessonIds
+        : [...prev.enrolledLessonIds, lessonId],
+    }))
+  }, [])
+
+  const addLesson = useCallback((lesson: Omit<Lesson, "id">) => {
+    setState((prev) => ({
+      ...prev,
+      lessons: [{ id: `l-${Date.now()}`, ...lesson }, ...prev.lessons],
+    }))
+  }, [])
+
+  const respondToRequest = useCallback((requestId: string) => {
+    setState((prev) => ({
+      ...prev,
+      helpRequests: prev.helpRequests.map((r) =>
+        r.id === requestId ? { ...r, status: "responded" } : r,
+      ),
+    }))
+  }, [])
+
   const value = useMemo<StoreContextValue>(
     () => ({
       ...state,
@@ -214,6 +321,9 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       addOpportunity,
       connectTelegram,
       setLang,
+      enrollLesson,
+      addLesson,
+      respondToRequest,
     }),
     [
       state,
@@ -227,6 +337,9 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       addOpportunity,
       connectTelegram,
       setLang,
+      enrollLesson,
+      addLesson,
+      respondToRequest,
     ],
   )
 
