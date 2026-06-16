@@ -10,6 +10,8 @@ import { CoursesLearning } from "@/components/courses-learning"
 import { CoursesView } from "@/components/courses-view"
 import { DashboardView } from "@/components/dashboard-view"
 import { AdminView } from "@/components/admin-view"
+import { P2PView } from "@/components/p2p-view"
+import { VolunteerView } from "@/components/volunteer-view"
 
 export default function Page() {
   const { hydrated, user, savedIds } = useStore()
@@ -48,6 +50,8 @@ export default function Page() {
       )}
       {activeTab === "courses" && <CoursesLearning />}
       {activeTab === "catalog" && <CoursesView />}
+      {activeTab === "p2p" && <P2PView />}
+      {activeTab === "volunteer" && <VolunteerView />}
       {activeTab === "dashboard" && (
         <DashboardView onExplore={() => setActiveTab("catalog")} />
       )}

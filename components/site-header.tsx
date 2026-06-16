@@ -6,12 +6,21 @@ import { cn } from "@/lib/utils"
 import { useStore } from "@/lib/store"
 import { useT, LANGUAGES } from "@/lib/i18n"
 
-export type Tab = "home" | "courses" | "catalog" | "dashboard" | "admin"
+export type Tab =
+  | "home"
+  | "courses"
+  | "catalog"
+  | "p2p"
+  | "volunteer"
+  | "dashboard"
+  | "admin"
 
 const tabDefs: { id: Tab; labelKey: string }[] = [
   { id: "home", labelKey: "nav.home" },
   { id: "courses", labelKey: "nav.courses" },
   { id: "catalog", labelKey: "nav.catalog" },
+  { id: "p2p", labelKey: "nav.p2p" },
+  { id: "volunteer", labelKey: "nav.volunteer" },
   { id: "dashboard", labelKey: "nav.dashboard" },
   { id: "admin", labelKey: "nav.admin" },
 ]
@@ -50,10 +59,14 @@ export function SiteHeader({ active, onChange, savedCount }: SiteHeaderProps) {
   const t = useT()
   const [mobileOpen, setMobileOpen] = useState(false)
 
-  // Admin tab is hidden unless the user holds the admin role.
-  const tabs = tabDefs.filter(
-    (tab) => tab.id !== "admin" || user?.role === "admin",
-  )
+  // Role-gated tabs: admin panel, student P2P help, and volunteer panel
+  // only appear for the matching role.
+  const tabs = tabDefs.filter((tab) => {
+    if (tab.id === "admin") return user?.role === "admin"
+    if (tab.id === "p2p") return user?.role === "student"
+    if (tab.id === "volunteer") return user?.role === "volunteer"
+    return true
+  })
 
   const handleSelect = (tab: Tab) => {
     onChange(tab)

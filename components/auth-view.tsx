@@ -9,14 +9,18 @@ import {
   Sparkles,
   KeyRound,
   ShieldCheck,
+  BookOpen,
+  HeartHandshake,
 } from "lucide-react"
-import { useStore, ADMIN_CODE } from "@/lib/store"
+import { useStore, ADMIN_CODE, type Role } from "@/lib/store"
+import { cn } from "@/lib/utils"
 
 export function AuthView() {
   const { register } = useStore()
   const [name, setName] = useState("")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
+  const [role, setRole] = useState<Exclude<Role, "admin">>("student")
   const [error, setError] = useState("")
   const [showCode, setShowCode] = useState(false)
   const [orgCode, setOrgCode] = useState("")
@@ -38,7 +42,7 @@ export function AuthView() {
       name.trim(),
       email.trim(),
       password,
-      isValidAdmin ? "admin" : "student",
+      isValidAdmin ? "admin" : role,
     )
   }
 
@@ -123,6 +127,28 @@ export function AuthView() {
               />
             </Field>
 
+            <div>
+              <span className="mb-1.5 block text-sm font-medium text-foreground">
+                Кто ты?
+              </span>
+              <div className="grid grid-cols-2 gap-2.5">
+                <RoleOption
+                  active={role === "student"}
+                  onClick={() => setRole("student")}
+                  icon={<BookOpen className="size-5" aria-hidden="true" />}
+                  title="Ученик"
+                  desc="Учусь и ищу помощь"
+                />
+                <RoleOption
+                  active={role === "volunteer"}
+                  onClick={() => setRole("volunteer")}
+                  icon={<HeartHandshake className="size-5" aria-hidden="true" />}
+                  title="Волонтер"
+                  desc="Помогаю другим"
+                />
+              </div>
+            </div>
+
             {!showCode ? (
               <button
                 type="button"
@@ -169,6 +195,47 @@ export function AuthView() {
         </div>
       </div>
     </main>
+  )
+}
+
+function RoleOption({
+  active,
+  onClick,
+  icon,
+  title,
+  desc,
+}: {
+  active: boolean
+  onClick: () => void
+  icon: ReactNode
+  title: string
+  desc: string
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-pressed={active}
+      className={cn(
+        "flex flex-col items-start gap-1.5 rounded-xl border p-3.5 text-left transition-colors",
+        active
+          ? "border-primary bg-primary/15 text-foreground"
+          : "border-border bg-background text-muted-foreground hover:border-primary/50",
+      )}
+    >
+      <span
+        className={cn(
+          "inline-flex rounded-lg p-1.5",
+          active
+            ? "bg-primary text-primary-foreground"
+            : "bg-card text-muted-foreground",
+        )}
+      >
+        {icon}
+      </span>
+      <span className="text-sm font-semibold text-foreground">{title}</span>
+      <span className="text-xs leading-snug text-muted-foreground">{desc}</span>
+    </button>
   )
 }
 
