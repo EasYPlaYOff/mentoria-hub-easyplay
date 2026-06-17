@@ -24,6 +24,8 @@ export type Role = "student" | "volunteer" | "admin"
 
 export type Lang = "kz" | "ru" | "en"
 
+export type Theme = "dark" | "light"
+
 export type Lesson = {
   id: string
   title: string
@@ -61,6 +63,7 @@ type PersistedState = {
   lessons: Lesson[]
   enrolledLessonIds: string[]
   helpRequests: HelpRequest[]
+  theme: Theme
 }
 
 const STORAGE_KEY = "mentoria-hub-state"
@@ -125,6 +128,7 @@ const defaultState: PersistedState = {
   lessons: seedLessons,
   enrolledLessonIds: [],
   helpRequests: seedHelpRequests,
+  theme: "dark",
 }
 
 type StoreContextValue = PersistedState & {
@@ -150,6 +154,7 @@ type StoreContextValue = PersistedState & {
   enrollLesson: (lessonId: string) => void
   addLesson: (lesson: Omit<Lesson, "id">) => void
   respondToRequest: (requestId: string) => void
+  toggleTheme: () => void
 }
 
 const StoreContext = createContext<StoreContextValue | null>(null)
@@ -186,6 +191,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
             parsed.helpRequests && parsed.helpRequests.length > 0
               ? parsed.helpRequests
               : seedHelpRequests,
+          theme: parsed.theme === "light" ? "light" : "dark",
         })
       }
     } catch {
@@ -203,6 +209,13 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       // ignore quota errors
     }
   }, [state, hydrated])
+
+  // Apply the active theme by toggling the `dark` class on <html>.
+  // Runs before paint to avoid a flash of the wrong theme.
+  useEffect(() => {
+    const root = document.documentElement
+    root.classList.toggle("dark", state.theme === "dark")
+  }, [state.theme])
 
   const register = useCallback(
     (name: string, email: string, password: string, role: Role = "student") => {
@@ -308,6 +321,13 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     }))
   }, [])
 
+  const toggleTheme = useCallback(() => {
+    setState((prev) => ({
+      ...prev,
+      theme: prev.theme === "dark" ? "light" : "dark",
+    }))
+  }, [])
+
   const value = useMemo<StoreContextValue>(
     () => ({
       ...state,
@@ -324,6 +344,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       enrollLesson,
       addLesson,
       respondToRequest,
+      toggleTheme,
     }),
     [
       state,
@@ -340,6 +361,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       enrollLesson,
       addLesson,
       respondToRequest,
+      toggleTheme,
     ],
   )
 

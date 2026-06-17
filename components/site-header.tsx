@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { GraduationCap, Menu, X, LogOut } from "lucide-react"
+import { GraduationCap, Menu, X, LogOut, Sun, Moon } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useStore } from "@/lib/store"
 import { useT, LANGUAGES } from "@/lib/i18n"
@@ -51,6 +51,26 @@ function LangSwitcher() {
         </button>
       ))}
     </div>
+  )
+}
+
+function ThemeToggle() {
+  const { theme, toggleTheme } = useStore()
+  const isDark = theme === "dark"
+  return (
+    <button
+      type="button"
+      onClick={toggleTheme}
+      className="inline-flex size-9 items-center justify-center rounded-lg border border-border bg-card text-muted-foreground transition-colors hover:text-foreground"
+      aria-label={isDark ? "Включить светлую тему" : "Включить тёмную тему"}
+      title={isDark ? "Светлая тема" : "Тёмная тема"}
+    >
+      {isDark ? (
+        <Sun className="size-4" aria-hidden="true" />
+      ) : (
+        <Moon className="size-4" aria-hidden="true" />
+      )}
+    </button>
   )
 }
 
@@ -121,8 +141,9 @@ export function SiteHeader({ active, onChange, savedCount }: SiteHeaderProps) {
               </button>
             ))}
           </nav>
-          <div className="ml-2 border-l border-border pl-3">
+          <div className="ml-2 flex items-center gap-2 border-l border-border pl-3">
             <LangSwitcher />
+            <ThemeToggle />
           </div>
           <div className="ml-2 flex items-center gap-2 border-l border-border pl-3">
             <span
@@ -164,7 +185,10 @@ export function SiteHeader({ active, onChange, savedCount }: SiteHeaderProps) {
               <span className="text-sm font-medium text-muted-foreground">
                 Язык / Language
               </span>
-              <LangSwitcher />
+              <div className="flex items-center gap-2">
+                <LangSwitcher />
+                <ThemeToggle />
+              </div>
             </div>
             {tabs.map((tab) => (
               <button

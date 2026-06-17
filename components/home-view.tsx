@@ -79,7 +79,7 @@ export function HomeView({ onStart, onExplore }: HomeViewProps) {
         <div className="relative">
           <div className="overflow-hidden rounded-3xl border border-border">
             <Image
-              src="/hero-students.png"
+              src="/hero-new.png"
               alt="Школьники учатся вместе на платформе Mentoria Hub"
               width={800}
               height={600}

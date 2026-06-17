@@ -37,8 +37,8 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   colorScheme: 'light dark',
   themeColor: [
-    { media: '(prefers-color-scheme: light)', color: 'white' },
-    { media: '(prefers-color-scheme: dark)', color: 'black' },
+    { media: '(prefers-color-scheme: light)', color: '#f8fafc' },
+    { media: '(prefers-color-scheme: dark)', color: '#0d0b21' },
   ],
 }
 
@@ -50,8 +50,20 @@ export default function RootLayout({
   return (
     <html
       lang="ru"
+      suppressHydrationWarning
       className={`${geistSans.variable} ${geistMono.variable} bg-background`}
     >
+      <head>
+        {/*
+          Apply the saved theme before first paint to avoid a flash of the
+          wrong theme. Defaults to dark (Mentoria Hub signature look).
+        */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var s=localStorage.getItem('mentoria-hub-state');var t='dark';if(s){var p=JSON.parse(s);if(p&&p.theme==='light')t='light';}if(t==='dark'){document.documentElement.classList.add('dark');}}catch(e){document.documentElement.classList.add('dark');}})();`,
+          }}
+        />
+      </head>
       <body className="font-sans antialiased">
         <StoreProvider>{children}</StoreProvider>
         {process.env.NODE_ENV === 'production' && <Analytics />}
